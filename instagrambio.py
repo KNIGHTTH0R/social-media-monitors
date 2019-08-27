@@ -4,12 +4,14 @@ from dhooks import Webhook, Embed
 import time
 from bs4 import BeautifulSoup
 
-#cd C:\Users\hugom\Desktop\suprattle code\client-code\a-notify && python instagrambio.py
-
 start = input("Input Anything To Start: ")
 instagramUsername = input("Instagran Username: ")
 print("Monitor Started")
-discordWebhook = "https://discordapp.com/api/webhooks/615628524535021578/vvRNmWxGBnRV5bIHJ9VdZAN5iEjB5rQGz90fxXXEm_FFCO6lRCWukOgnH2ZbpIkd7d6X"
+discordWebhook = "" #put your webhook in the quotes
+
+
+
+# task code
 
 while True:
     instagramUrl = "https://www.instagram.com/" + instagramUsername
@@ -48,8 +50,8 @@ while True:
             )
             embed.add_field(name='Link', value="{}".format(instagramUrl), inline=True) 
             embed.add_field(name='Old Bio/New Bio', value="{}/{}".format(oldInstagramBio, instagramBio), inline=False) 
-            embed.set_author(name='Notify - Instagran Moniotr')
-            embed.set_footer(text='Notify | @suprattle')
+            embed.set_author(name='Instagran Moniotr')
+            embed.set_footer(text='@suprattle')
             try:
                 embed.set_thumbnail(instagramProfileImage)
                 hook.send(embed=embed)
@@ -68,8 +70,8 @@ while True:
             )
             embed.add_field(name='Link', value="{}".format(instagramUrl), inline=True) 
             embed.add_field(name='Old Bio Url/New Bio Url', value="{}/{}".format(oldInstagramBioUrl, instagramBioUrl), inline=False) 
-            embed.set_author(name='Notify - Instagran Moniotr')
-            embed.set_footer(text='Notify | @suprattle')
+            embed.set_author(name='Instagran Moniotr')
+            embed.set_footer(text='@suprattle')
             try:
                 embed.set_thumbnail(instagramProfileImage)
                 hook.send(embed=embed)
@@ -88,8 +90,8 @@ while True:
             )
             embed.add_field(name='Link', value="{}".format(instagramUrl), inline=True) 
             embed.add_field(name='Old Name/New Name', value="{}/{}".format(oldInstagramName, instagramName), inline=False) 
-            embed.set_author(name='Notify - Instagran Moniotr')
-            embed.set_footer(text='Notify | @suprattle')
+            embed.set_author(name='Instagran Moniotr')
+            embed.set_footer(text='@suprattle')
             try:
                 embed.set_thumbnail(instagramProfileImage)
                 hook.send(embed=embed)
@@ -108,8 +110,8 @@ while True:
             )
             embed.add_field(name='Link', value="{}".format(instagramUrl), inline=True) 
             embed.add_field(name='Old Following Number/New Following Number', value="{}/{}".format(str(instagramFollowing), str(oldInstagramFollowing)), inline=False) 
-            embed.set_author(name='Notify - Instagran Moniotr')
-            embed.set_footer(text='Notify | @suprattle')
+            embed.set_author(name='Instagran Moniotr')
+            embed.set_footer(text='@suprattle')
             try:
                 embed.set_thumbnail(instagramProfileImage)
                 hook.send(embed=embed)
