@@ -6,9 +6,26 @@ from bs4 import BeautifulSoup
 
 start = input("Input Anything To Start: ")
 instagramUsername = input("Instagran Username: ")
+retryDelay = input("Monitor Delay: ")
 print("Monitor Started")
 discordWebhook = "" #put your webhook in the quotes
 
+def webhook(discordWebhook, instagramUrl, newValue, changeType):
+    hook = Webhook(discordWebhook)
+    embed = Embed(
+    description="{} Change".format(changeType),
+    color=0XFFA574,
+    timestamp='now',
+    )
+    embed.add_field(name='Link', value=instagramUrl, inline=True) 
+    embed.add_field(name='New Update', value=newValue, inline=False) 
+    embed.set_author(name='Instagran Moniotr')
+    embed.set_footer(text='@suprattle')
+    try:
+        embed.set_thumbnail(instagramProfileImage)
+        hook.send(embed=embed)
+    except:
+        hook.send(embed=embed)
 
 
 # task code
@@ -27,103 +44,52 @@ while True:
     scriptJsonSrc = scriptJsonSrc[1]
     scriptJsonSrc = str(scriptJsonSrc)
     scriptJsonSrc = scriptJsonSrc.replace(";", "")
-    # This is all the profile data
     scriptJson = json.loads(scriptJsonSrc)
+
     print("Checking")
+    #remove the line above to remove console spam
+
     instagramBio = scriptJson['entry_data']['ProfilePage'][0]['graphql']['user']['biography']
     instagramBioUrl = scriptJson['entry_data']['ProfilePage'][0]['graphql']['user']['external_url']
     instagramName = scriptJson['entry_data']['ProfilePage'][0]['graphql']['user']['full_name']
     instagramFollowers = scriptJson['entry_data']['ProfilePage'][0]['graphql']['user']['edge_followed_by']['count']
     instagramFollowing = scriptJson['entry_data']['ProfilePage'][0]['graphql']['user']['edge_follow']['count']
     instagramProfileImage = scriptJson['entry_data']['ProfilePage'][0]['graphql']['user']['profile_pic_url_hd']
+
     # now we check these values against the previous checks values, it should throw an error the first time
+
     try:
         if instagramBio != oldInstagramBio:
             print("Detected Change in Bio")
             print("Sending Webhook")
             changeType = "Bio Text"
-            hook = Webhook(discordWebhook)
-            embed = Embed(
-            description="{} Change".format(changeType),
-            color=11075584,
-            timestamp='now',
-            )
-            embed.add_field(name='Link', value="{}".format(instagramUrl), inline=True) 
-            embed.add_field(name='Old Bio/New Bio', value="{}/{}".format(oldInstagramBio, instagramBio), inline=False) 
-            embed.set_author(name='Instagran Moniotr')
-            embed.set_footer(text='@suprattle')
-            try:
-                embed.set_thumbnail(instagramProfileImage)
-                hook.send(embed=embed)
-            except:
-                hook.send(embed=embed)
-        ignorer = "20"
+            newValue = instagramBio
+            webhook(discordWebhook, instagramUrl, newValue, changeType)
         if instagramBioUrl != oldInstagramBioUrl:
             print("Detected Change in Bio Url")
             print("Sending Webhook")
             changeType = "Bio Url"
-            hook = Webhook(discordWebhook)
-            embed = Embed(
-            description="{} Change".format(changeType),
-            color=11075584,
-            timestamp='now',
-            )
-            embed.add_field(name='Link', value="{}".format(instagramUrl), inline=True) 
-            embed.add_field(name='Old Bio Url/New Bio Url', value="{}/{}".format(oldInstagramBioUrl, instagramBioUrl), inline=False) 
-            embed.set_author(name='Instagran Moniotr')
-            embed.set_footer(text='@suprattle')
-            try:
-                embed.set_thumbnail(instagramProfileImage)
-                hook.send(embed=embed)
-            except:
-                hook.send(embed=embed)
-        ignorer = "20"
+            newValue = instagramBioUrl
+            webhook(discordWebhook, instagramUrl, newValue, changeType)
         if instagramName != oldInstagramName:
             print("Detected Change in Name")
             print("Sending Webhook")
             changeType = "Name"
-            hook = Webhook(discordWebhook)
-            embed = Embed(
-            description="{} Change".format(changeType),
-            color=11075584,
-            timestamp='now',
-            )
-            embed.add_field(name='Link', value="{}".format(instagramUrl), inline=True) 
-            embed.add_field(name='Old Name/New Name', value="{}/{}".format(oldInstagramName, instagramName), inline=False) 
-            embed.set_author(name='Instagran Moniotr')
-            embed.set_footer(text='@suprattle')
-            try:
-                embed.set_thumbnail(instagramProfileImage)
-                hook.send(embed=embed)
-            except:
-                hook.send(embed=embed)
-        ignorer = "20"
+            newValue = instagramName
+            webhook(discordWebhook, instagramUrl, newValue, changeType)
         if int(instagramFollowing) > int(oldInstagramFollowing):
             print("Detected Change in Following")
             print("Sending Webhook")
             changeType = "Following"
-            hook = Webhook(discordWebhook)
-            embed = Embed(
-            description="{} Change".format(changeType),
-            color=11075584,
-            timestamp='now',
-            )
-            embed.add_field(name='Link', value="{}".format(instagramUrl), inline=True) 
-            embed.add_field(name='Old Following Number/New Following Number', value="{}/{}".format(str(instagramFollowing), str(oldInstagramFollowing)), inline=False) 
-            embed.set_author(name='Instagran Moniotr')
-            embed.set_footer(text='@suprattle')
-            try:
-                embed.set_thumbnail(instagramProfileImage)
-                hook.send(embed=embed)
-            except:
-                hook.send(embed=embed)
+            newValue = str(instagramFollowing)
+            webhook(discordWebhook, instagramUrl, newValue, changeType)
         oldInstagramBio = instagramBio
         oldInstagramBioUrl = instagramBioUrl
         oldInstagramName = instagramName
         oldInstagramFollowers = instagramFollowers
         oldInstagramFollowing = instagramFollowing 
         oldInstagramProfileImage = instagramProfileImage
-        time.sleep(3)
+        time.sleep(int(retryDelay))
     except Exception as e:
         oldInstagramBio = instagramBio
         oldInstagramBioUrl = instagramBioUrl
@@ -132,6 +98,8 @@ while True:
         oldInstagramFollowing = instagramFollowing 
         oldInstagramProfileImage = instagramProfileImage
         print("Hit Error - " + str(e))
-        time.sleep(3)
-                
-
+        try:
+            time.sleep(int(retryDelay))
+        except:
+            print("Invalid Retry Delay -> Using 3 Seconds")
+            time.sleep(3)
