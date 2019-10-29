@@ -21,7 +21,7 @@ def webhook(discordWebhook, instagramUrl, newValue, changeType):
     )
     embed.add_field(name='Link', value=instagramUrl, inline=True) 
     embed.add_field(name='New Update', value=newValue, inline=False) 
-    embed.set_author(name='Instagran Moniotr')
+    embed.set_author(name='Instagran Monitor')
     embed.set_footer(text='@suprattle')
     try:
         embed.set_thumbnail(instagramProfileImage)
