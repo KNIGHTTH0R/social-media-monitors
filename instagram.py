@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 
 start = input("Input Anything To Start: ")
 instagramUsername = input("Instagran Username: ")
+if "@" in instargarmUsername:
+    instagramUsername = instagramUsername.replace("@", "")
 retryDelay = input("Monitor Delay: ")
 print("Monitor Started")
 discordWebhook = "" #put your webhook in the quotes
