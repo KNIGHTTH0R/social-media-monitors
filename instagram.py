@@ -10,7 +10,7 @@ if "@" in instagramUsername:
     instagramUsername = instagramUsername.replace("@", "")
 retryDelay = input("Monitor Delay: ")
 print("Monitor Started")
-discordWebhook = "https://discordapp.com/api/webhooks/629069286731677716/Bw9WY7s0_EQonKNC5H8N2FI97grvLnZxHzDJtsZ5gg_2WunUBpg5imWLHOHpOwv35JdF" #put your webhook in the quotes
+discordWebhook = "" #put your webhook in the quotes
 
 def webhook(discordWebhook, instagramUrl, newValue, changeType, instagramUsername):
     hook = Webhook(discordWebhook)
@@ -47,12 +47,11 @@ def webhook_post(discordWebhook, instagramUrl, postCaption, postImage, instagram
 # task code
 
 while True:
-    session = requests.session()
     instagramUrl = "https://www.instagram.com/" + instagramUsername
     headers = {
         'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
     }
-    r = session.get(instagramUrl, headers=headers)
+    r = requests.get(instagramUrl, headers=headers)
     soup = BeautifulSoup(r.text, "html.parser")
     scriptJsonSrc = soup.find_all("script")
     scriptJsonSrc = scriptJsonSrc[4]
