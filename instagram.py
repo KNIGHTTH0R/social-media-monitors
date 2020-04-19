@@ -3,9 +3,22 @@ import json
 from dhooks import Webhook, Embed
 import time
 from bs4 import BeautifulSoup
+import os
+import random
 
 start = input("Input Anything To Start: ")
 instagramUsername = input("Instagran Username: ")
+proxyCheck = input("Proxies (y/n): ")
+
+if "y" in proxyCheck:
+    try:
+        filePath = input("Proxy Txt File Name (.txt included): ")
+        f = open(filePath, "r")
+        proxies = (f.read()).split("\n")
+    except:
+        print("Error - Please ReRun or no Proxies will be Used")
+        proxyCheck = "n"
+
 if "@" in instagramUsername:
     instagramUsername = instagramUsername.replace("@", "")
 retryDelay = input("Monitor Delay: ")
@@ -58,7 +71,15 @@ while True:
         headers = {
             'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
         }
-        r = requests.get(instagramUrl, headers=headers)
+        if "y" in proxyCheck:
+            proxy = (random.choice(proxies)).split(":")
+            proxyDict = {
+                'http': 'http://{}:{}@{}:{}'.format(proxy[2], proxy[3], proxy[0], proxy[1]),
+                'https': 'https://{}:{}@{}:{}'.format(proxy[2], proxy[3], proxy[0], proxy[1])
+            }
+            r = requests.get(instagramUrl, headers=headers, proxies=proxyDict)
+        else:
+            r = requests.get(instagramUrl, headers=headers)
         soup = BeautifulSoup(r.text, "html.parser")
         scriptJsonSrc = soup.find_all("script")
         scriptJsonSrc = scriptJsonSrc[4]
