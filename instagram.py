@@ -133,7 +133,7 @@ while True:
             except:
                 print("Invalid Retry Delay -> Using 3 Seconds")
                 time.sleep(3)
-    except:
+    except Exception as e:
         try:
             print("Error - " + str(e))
             time.sleep(int(retryDelay))
